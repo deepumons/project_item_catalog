@@ -14,6 +14,11 @@ def list_category_items(category_name):
     return "Lists all items under the category: {}".format(category_name)
 
 
+@app.route("/catalog/<string:category_name>/<string:item_name>")
+def list_item_description(category_name, item_name):
+    return "Lists item discription for: {}".format(item_name)
+
+
 if __name__ == "__main__":
     app.debug = True
     app.run(host="0.0.0.0", port=5000)
