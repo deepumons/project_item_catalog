@@ -24,6 +24,11 @@ def edit_item(category_name, item_name):
     return "This page is used to edit {}".format(item_name)
 
 
+@app.route("/catalog/<string:category_name>/<string:item_name>/delete")
+def delete_item(category_name, item_name):
+    return "This page is used to delete {}".format(item_name)
+
+
 if __name__ == "__main__":
     app.debug = True
     app.run(host="0.0.0.0", port=5000)
