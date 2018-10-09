@@ -5,7 +5,13 @@ app = Flask(__name__)
 @app.route("/")
 @app.route("/catalog")
 def list_catalog():
-    return "Default route. Entire categories and items will be listed here."
+    return "Lists all categories and the latest added items."
+
+
+@app.route("/catalog/<string:category>/")
+@app.route("/catalog/<string:category>/items")
+def list_category_items(category):
+    return "Lists all items under the category: {}".format(category)
 
 
 if __name__ == "__main__":
