@@ -8,10 +8,10 @@ def list_catalog():
     return "Lists all categories and the latest added items."
 
 
-@app.route("/catalog/<string:category>/")
-@app.route("/catalog/<string:category>/items")
-def list_category_items(category):
-    return "Lists all items under the category: {}".format(category)
+@app.route("/catalog/<string:category_name>/")
+@app.route("/catalog/<string:category_name>/items")
+def list_category_items(category_name):
+    return "Lists all items under the category: {}".format(category_name)
 
 
 if __name__ == "__main__":
