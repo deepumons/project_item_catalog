@@ -1,16 +1,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>
-      balance$heet - Home
-    </title>
-    <link href="../static/styles.css" rel="stylesheet" type="text/css" />
+  {% block head %}
+      <title>Catalog App - {% block title %}{% endblock %}</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" type="text/css">
+      {% endblock %}
 </head>
 <body>
     <!-- start header -->
     <div id="header">
         <div id="logo">
             <h1>
-                Catalog App
+              Catalog App
             </h1>
         </div>
     </div>
@@ -19,9 +19,7 @@
     <div id="page">
         <!-- start content -->
         <div id="content">
-		<div id="main-panel">
-
-		<div>
+		        {% block content %}{% endblock %}
         </div>
         <!-- end content -->
         <div style="clear: both;">

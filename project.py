@@ -1,11 +1,11 @@
-from flask import Flask
+from flask import Flask, render_template
 app = Flask(__name__)
 
 
 @app.route("/")
 @app.route("/catalog")
-def list_catalog():
-    return "Lists all categories and the latest added items."
+def list_catalog():   
+    return render_template("catalog.html")
 
 
 @app.route("/catalog/<string:category_name>/")
