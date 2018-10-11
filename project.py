@@ -4,7 +4,8 @@ app = Flask(__name__)
 
 @app.route("/")
 @app.route("/catalog")
-def list_catalog():   
+def list_catalog():
+    #return "Lists all categories and the latest added items."
     return render_template("catalog.html")
 
 
