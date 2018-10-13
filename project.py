@@ -32,8 +32,8 @@ def list_item(category_name, item_name):
 
 
 @app.route("/catalog/<string:category_name>/<string:item_name>/edit")
-def edit_item(category_name, item_name):
-    return "This page is used to edit {}".format(item_name)
+def edit_item(category_name, item_name):    
+    return render_template("edit_item.html", categories=categories, item=items[0])
 
 
 @app.route("/catalog/<string:category_name>/<string:item_name>/delete")
