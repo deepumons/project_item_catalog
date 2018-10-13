@@ -22,7 +22,7 @@ def list_catalog():
 @app.route("/catalog/<string:category_name>/")
 @app.route("/catalog/<string:category_name>/items")
 def list_category_items(category_name):
-    return "Lists all items under the category: {}".format(category_name)
+    return render_template("items.html", category_name=category_name, items=items, categories=categories)    
 
 
 @app.route("/catalog/<string:category_name>/<string:item_name>")
