@@ -3,7 +3,6 @@
 {% block content %}
 <div id="left-panel">
     <h1>Categories</h1>
-
     {% for i in categories %}
     <div>
       <p>
@@ -13,19 +12,11 @@
         </p>
     </div>
     {% endfor %}
-
 </div>
-
 <div id="main-panel">
     <h1>{{item.name}}</h1>
-
       <p>
-        {{item.description}}              
+        {{item.description}}
         </p>
-
 </div>
-
-
-
-
 {% endblock %}

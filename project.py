@@ -28,7 +28,6 @@ def list_category_items(category_name):
 
 @app.route("/catalog/<string:category_name>/<string:item_name>")
 def list_item(category_name, item_name):
-    #return "Lists item discription for: {}".format(item_name)
     return render_template("item.html", categories=categories, item=items[0])
 
 
