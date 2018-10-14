@@ -1,5 +1,5 @@
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -28,6 +28,8 @@ class CategoryItem(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     description = Column(String(500))
+    date = Column(DateTime, nullable=False)
+
 
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship(Category)

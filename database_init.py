@@ -65,6 +65,7 @@ session.commit()
 
 item1 = CategoryItem(name="Television",
 	description="BPL 80 cm (32 inches) HD Ready LED TV",
+    date=datetime.datetime.now(),
 	category_id=1,
 	user_id=1)
 session.add(item1)
@@ -72,39 +73,44 @@ session.commit()
 
 item2 = CategoryItem(name="Apple iPhone XS",
 	description="The latest smart phone from Apple.",
+    date=datetime.datetime.now(),
 	category_id=2,
 	user_id=1)
 session.add(item2)
 session.commit()
-	
+
 item3 = CategoryItem(name="Apple iPhone XS Max",
 	description="The larger model of the latest smart phone from Apple. ",
+    date=datetime.datetime.now(),
 	category_id=2,
 	user_id=1)
 session.add(item3)
 session.commit()
-	
+
 item4 = CategoryItem(name="Google Pixel 3",
 	description="The latest smart phone from Google.",
+    date=datetime.datetime.now(),
 	category_id=2,
 	user_id=1)
 session.add(item4)
 session.commit()
-	
+
 item5 = CategoryItem(name="Baseball bat",
 	description="Strong base ball bat. Made of wood.",
+    date=datetime.datetime.now(),
 	category_id=3,
 	user_id=1)
 session.add(item5)
 session.commit()
-	
+
 item6 = CategoryItem(name="Baseball Gloves",
 	description="Synthetic gloves mean for baseball players.",
+    date=datetime.datetime.now(),
 	category_id=3,
 	user_id=1)
 session.add(item6)
 session.commit()
-	
+
 session.add(item6)
 session.commit()
 
