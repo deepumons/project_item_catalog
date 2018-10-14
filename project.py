@@ -9,7 +9,7 @@ app = Flask(__name__)
 # Initialize the database connection, DB session
 engine = create_engine('sqlite:///itemcatalog.db')
 Base.metadata.bind = engine
-DBSession = sessionmaker(bind = engine)
+DBSession = sessionmaker(bind=engine)
 
 
 # dictionary for a single category, categories, and items for testing
@@ -30,15 +30,24 @@ items = [{'id': '1', 'name': 'Goggles', 'description': 'Polarized goggles.', 'ca
 def list_catalog():
     session = DBSession()
     categories = session.query(Category).all()
-    latest_items = session.query(CategoryItem).order_by(desc(CategoryItem.date))
+    latest_items = session.query(CategoryItem)
+    .order_by(desc(CategoryItem.date))
     session.close()
-    return render_template("catalog.html", categories=categories, items=latest_items)
+    return render_template(
+        "catalog.html", categories=categories, items=latest_items)
 
 
 @app.route("/catalog/<string:category_name>/")
-@app.route("/catalog/<string:category_name>/items")
+@app.route("/catalog/<string:category_name>/items/")
 def list_category_items(category_name):
-    return render_template("items.html", category_name=category_name, items=items, categories=categories)
+    session = DBSession()
+    categories = session.query(Category).all()
+    category = session.query(Category).filter_by(name=category_name).one()
+    category_items = session.query(CategoryItem).filter_by(category=category)
+    session.close()
+    return render_template(
+        "items.html", category_name=category_name, items=category_items,
+        categories=categories)
 
 
 @app.route("/catalog/<string:category_name>/<string:item_name>")
@@ -48,15 +57,17 @@ def list_item(category_name, item_name):
 
 @app.route("/catalog/<string:category_name>/<string:item_name>/edit")
 def edit_item(category_name, item_name):
-    return render_template("edit_item.html", categories=categories, item=items[0])
+    return render_template(
+        "edit_item.html", categories=categories, item=items[0])
 
 
 @app.route("/catalog/<string:category_name>/<string:item_name>/delete")
 def delete_item(category_name, item_name):
-    return render_template("delete_item.html", categories=categories, item=items[0])
+    return render_template(
+        "delete_item.html", categories=categories, item=items[0])
 
 
 if __name__ == "__main__":
-    #app.secret_key = "some_secret_key"
+    app.secret_key = "some_secret_key"
     app.debug = True
     app.run(host="0.0.0.0", port=5000)
