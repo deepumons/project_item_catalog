@@ -15,8 +15,7 @@ session.query(Category).delete()
 session.query(CategoryItem).delete()
 
 # Create dummy users
-user1 = User(name="Deepak Rajendran",
-              email="urdeepak@gmail.com")
+user1 = User(name="Deepak Rajendran", email="urdeepak@gmail.com")
 session.add(user1)
 session.commit()
 
@@ -41,78 +40,80 @@ category5 = Category(name="Movies")
 session.add(category5)
 session.commit()
 
-#category6 = Category(name="Women's Fashion")
-#session.add(category6)
-#session.commit()
+# category6 = Category(name="Women's Fashion")
+# session.add(category6)
+# session.commit()
 
-#category7 = Category(name="Sports, Fitness, Bags, Luggage")
-#session.add(category7)
-#session.commit()
+# category7 = Category(name="Sports, Fitness, Bags, Luggage")
+# session.add(category7)
+# session.commit()
 
-#category8 = Category(name="Beauty, Health, Grocery")
-#session.add(category8)
-#session.commit()
+# category8 = Category(name="Beauty, Health, Grocery")
+# session.add(category8)
+# session.commit()
 
-#category9 = Category(name="Home, Kitchen, Pets")
-#session.add(category9)
-#session.commit()
+# category9 = Category(name="Home, Kitchen, Pets")
+# session.add(category9)
+# session.commit()
 
-#category10 = Category(name="Toys, Baby Products")
-#session.add(category10)
-#session.commit()
+# category10 = Category(name="Toys, Baby Products")
+# session.add(category10)
+# session.commit()
 
 # Create category items
-
-item1 = CategoryItem(name="Television",
-	description="BPL 80 cm (32 inches) HD Ready LED TV",
+item1 = CategoryItem(
+    name="Television",
+    description="BPL 80 cm (32 inches) HD Ready LED TV",
     date=datetime.datetime.now(),
-	category_id=1,
-	user_id=1)
+    category_id=1,
+    user_id=1)
 session.add(item1)
 session.commit()
 
-item2 = CategoryItem(name="Apple iPhone XS",
-	description="The latest smart phone from Apple.",
+item2 = CategoryItem(
+    name="Apple iPhone XS",
+    description="The latest smart phone from Apple.",
     date=datetime.datetime.now(),
-	category_id=2,
-	user_id=1)
+    category_id=2,
+    user_id=1)
 session.add(item2)
 session.commit()
 
-item3 = CategoryItem(name="Apple iPhone XS Max",
-	description="The larger model of the latest smart phone from Apple. ",
+item3 = CategoryItem(
+    name="Apple iPhone XS Max",
+    description="The larger model of the latest smart phone from Apple. ",
     date=datetime.datetime.now(),
-	category_id=2,
-	user_id=1)
+    category_id=2,
+    user_id=1)
 session.add(item3)
 session.commit()
 
-item4 = CategoryItem(name="Google Pixel 3",
-	description="The latest smart phone from Google.",
+item4 = CategoryItem(
+    name="Google Pixel 3",
+    description="The latest smart phone from Google.",
     date=datetime.datetime.now(),
-	category_id=2,
-	user_id=1)
+    category_id=2,
+    user_id=1)
 session.add(item4)
 session.commit()
 
-item5 = CategoryItem(name="Baseball bat",
-	description="Strong base ball bat. Made of wood.",
+item5 = CategoryItem(
+    name="Baseball bat",
+    description="Strong base ball bat. Made of wood.",
     date=datetime.datetime.now(),
-	category_id=3,
-	user_id=1)
+    category_id=3,
+    user_id=1)
 session.add(item5)
 session.commit()
 
-item6 = CategoryItem(name="Baseball Gloves",
-	description="Synthetic gloves mean for baseball players.",
+item6 = CategoryItem(
+    name="Baseball Gloves",
+    description="Synthetic gloves mean for baseball players.",
     date=datetime.datetime.now(),
-	category_id=3,
-	user_id=1)
+    category_id=3,
+    user_id=1)
 session.add(item6)
 session.commit()
-
-session.add(item6)
-session.commit()
-
+session.close()
 
 print "The database has been populated and ready."
