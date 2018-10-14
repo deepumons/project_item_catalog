@@ -1,5 +1,16 @@
 from flask import Flask, render_template
+from sqlalchemy import create_engine, desc
+from sqlalchemy.orm import sessionmaker
+from database_setup import Base, User, Category, CategoryItem
+
+
 app = Flask(__name__)
+
+# Initialize the database connection, DB session
+engine = create_engine('sqlite:///itemcatalog.db')
+Base.metadata.bind = engine
+DBSession = sessionmaker(bind = engine)
+
 
 # dictionary for a single category, categories, and items for testing
 category = {'name': 'Soccer', 'id': '1'}
@@ -15,9 +26,13 @@ items = [{'id': '1', 'name': 'Goggles', 'description': 'Polarized goggles.', 'ca
 
 
 @app.route("/")
-@app.route("/catalog")
+@app.route("/catalog/")
 def list_catalog():
-    return render_template("catalog.html", categories=categories, items=items)
+    session = DBSession()
+    categories = session.query(Category).all()
+    latest_items = session.query(CategoryItem).order_by(desc(CategoryItem.date))
+    session.close()
+    return render_template("catalog.html", categories=categories, items=latest_items)
 
 
 @app.route("/catalog/<string:category_name>/")
@@ -42,5 +57,6 @@ def delete_item(category_name, item_name):
 
 
 if __name__ == "__main__":
+    #app.secret_key = "some_secret_key"
     app.debug = True
     app.run(host="0.0.0.0", port=5000)
