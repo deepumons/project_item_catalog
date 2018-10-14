@@ -3,7 +3,6 @@
 {% block content %}
 <div id="left-panel">
     <h1>Categories</h1>
-
     {% for i in categories %}
     <div>
       <p>
@@ -13,25 +12,19 @@
         </p>
     </div>
     {% endfor %}
-
 </div>
 
 <div id="main-panel">
-    <h1>{{category_name}} items</h1>
+    <h1>Popular {{category_name}}</h1>
     {% for i in items %}
     <div>
       <p>
       <a href='{{url_for('list_item', category_name = i.category_name, item_name = i.name) }}'>
         {{i.name}}
         </a>
-        <i>({{i.category_name}})</i>
+        ({{i.category_name}})
         </p>
     </div>
     {% endfor %}
-
 </div>
-
-
-
-
 {% endblock %}
