@@ -11,7 +11,6 @@ engine = create_engine('sqlite:///itemcatalog.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 
-
 @app.route("/")
 @app.route("/catalog/")
 def list_catalog():
@@ -50,8 +49,7 @@ def list_item(category_name, item_name):
 def edit_item(category_name, item_name):
     session = DBSession()
     categories = session.query(Category).all()
-    item = session.query(CategoryItem).filter_by(name = item_name).one()
-    category_name=item.category.name
+    item = session.query(CategoryItem).filter_by(name = item_name).one()    
     session.close()
     return render_template(
         "edit_item.html", categories=categories, item=item, category_name=category_name)
@@ -65,6 +63,15 @@ def delete_item(category_name, item_name):
     session.close()
     return render_template(
         "delete_item.html", categories=categories, item=item)
+
+
+@app.route("/catalog/add")
+def add_item():
+    session = DBSession()
+    categories = session.query(Category).all()
+    session.close()
+    return render_template(
+        "add_item.html", categories=categories)
 
 
 if __name__ == "__main__":
