@@ -62,7 +62,7 @@ session.commit()
 
 # Create category items
 item1 = CategoryItem(
-    name="Television",
+    name="BPL TV",
     description="BPL 80 cm (32 inches) HD Ready LED TV",
     date=datetime.datetime.now(),
     category_id=1,
