@@ -12,19 +12,6 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 
 
-# dictionary for a single category, categories, and items for testing
-category = {'name': 'Soccer', 'id': '1'}
-categories = [{'name': 'Soccer', 'id': '1'}, {'name': 'Basketball', 'id': '2'},
-{'name': 'Baseball', 'id': '3'}, {'name': 'Frisbee', 'id': '4'},
-{'name': 'Snowboarding', 'id': '5'}]
-item = {'id': '1', 'name': 'Goggles', 'description': 'Polarized goggles.', 'category_id': '5', 'category_name': 'Snowboarding'}
-items = [{'id': '1', 'name': 'Goggles', 'description': 'Polarized goggles.', 'category_id': '5', 'category_name': 'Snowboarding'},
-{'id': '2', 'name': 'Snowboard', 'description': 'Awesome Snowboard.', 'category_id': '5', 'category_name': 'Snowboarding'},
-{'id': '3', 'name': 'Two Shinguards', 'description': 'Shinguards x 2.', 'category_id': '1', 'category_name': 'Soccer'},
-{'id': '4', 'name': 'Shinguard', 'description': 'High quality shinguard', 'category_id': '1', 'category_name': 'Soccer'},
-{'id': '5', 'name': 'Bat', 'description': 'High quality red wood bat', 'category_id': '3', 'category_name': 'Baseball'}]
-
-
 @app.route("/")
 @app.route("/catalog/")
 def list_catalog():
@@ -72,8 +59,12 @@ def edit_item(category_name, item_name):
 
 @app.route("/catalog/<string:category_name>/<string:item_name>/delete")
 def delete_item(category_name, item_name):
+    session = DBSession()
+    categories = session.query(Category).all()
+    item = session.query(CategoryItem).filter_by(name = item_name).one()
+    session.close()
     return render_template(
-        "delete_item.html", categories=categories, item=items[0])
+        "delete_item.html", categories=categories, item=item)
 
 
 if __name__ == "__main__":
