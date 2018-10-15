@@ -60,8 +60,13 @@ def list_item(category_name, item_name):
 
 @app.route("/catalog/<string:category_name>/<string:item_name>/edit")
 def edit_item(category_name, item_name):
+    session = DBSession()
+    categories = session.query(Category).all()
+    item = session.query(CategoryItem).filter_by(name = item_name).one()
+    category_name=item.category.name
+    session.close()
     return render_template(
-        "edit_item.html", categories=categories, item=items[0])
+        "edit_item.html", categories=categories, item=item, category_name=category_name)
 
 
 @app.route("/catalog/<string:category_name>/<string:item_name>/delete")
