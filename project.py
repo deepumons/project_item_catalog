@@ -30,8 +30,7 @@ items = [{'id': '1', 'name': 'Goggles', 'description': 'Polarized goggles.', 'ca
 def list_catalog():
     session = DBSession()
     categories = session.query(Category).all()
-    latest_items = session.query(CategoryItem)
-    .order_by(desc(CategoryItem.date))
+    latest_items = session.query(CategoryItem).order_by(desc(CategoryItem.date))
     session.close()
     return render_template(
         "catalog.html", categories=categories, items=latest_items)
@@ -52,7 +51,11 @@ def list_category_items(category_name):
 
 @app.route("/catalog/<string:category_name>/<string:item_name>")
 def list_item(category_name, item_name):
-    return render_template("item.html", categories=categories, item=items[0])
+    session = DBSession()
+    categories = session.query(Category).all()
+    item = session.query(CategoryItem).filter_by(name = item_name).one()
+    session.close()
+    return render_template("item.html", categories=categories, item=item)
 
 
 @app.route("/catalog/<string:category_name>/<string:item_name>/edit")
