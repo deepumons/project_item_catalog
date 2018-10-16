@@ -13,12 +13,13 @@
     </div>
     {% endfor %}
 </div>
-
 <div id="main-panel">
 <p>
-  <a href='{{url_for('add_item')}}'>
-    Add New Item
-    </a>
+  {% if user_id != None %}
+      <a href='{{url_for('add_item')}}'>
+      Add New Item
+      </a>
+    {% endif %}
 </p>
     <h1>Latest items</h1>
     {% for i in items %}
@@ -31,10 +32,5 @@
         </p>
     </div>
     {% endfor %}
-
 </div>
-
-
-
-
 {% endblock %}
