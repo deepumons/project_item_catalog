@@ -15,11 +15,11 @@
 </div>
 <div id="main-panel">
     <h1>Add item</h1>
-    <form action= "{{url_for('edit_item', category_name=category_name, item_name=item_name)}}" method = 'POST'>
+    <form action="{{url_for('add_item')}}" method = 'POST'>
     <p>Name:</p>
     <input type = 'text' size='30' name = 'name'>
     <p>Description:</p>
-    <input type = 'textarea' size='60' name = 'name'>
+    <input type = 'textarea' size='60' name = 'description'>
     <p>Category:</p>
     <select name=category method="GET" action="/">
     {% for i in categories %}
