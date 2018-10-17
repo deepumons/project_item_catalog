@@ -21,6 +21,19 @@
     <div id="page">
         <!-- start content -->
         <div id="content">
+          <!-- Flash message begins -->          
+              {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                  <div class = 'input-validation-error'>
+                  <ul>
+                  {% for message in messages %}
+                      <li> <strong> {{ message }} </strong> </li>
+                  {% endfor %}
+                  </ul>
+                </div>
+                  {% endif %}
+              {% endwith %}
+          <!-- Flash message ends -->
 		        {% block content %}{% endblock %}
         </div>
         <!-- end content -->
@@ -29,7 +42,7 @@
     </div>
     <!-- end page -->
     <div id="footer-bg">
-        <div id="footer">          
+        <div id="footer">
         </div>
     </div>
 </body>
