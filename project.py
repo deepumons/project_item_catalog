@@ -55,7 +55,7 @@ def list_category_items(category_name):
 def list_item(category_name, item_name):
     session = DBSession()
     categories = session.query(Category).all()
-    item = session.query(CategoryItem).filter_by(name=item_name).one()
+    item = session.query(CategoryItem).filter_by(name=item_name).first()
     category_name = item.category.name
     session.close()
     return render_template(
@@ -102,8 +102,8 @@ def add_item():
         else:
             # See if the user has entered any data before proceeding
             if request.form['name'] is None or request.form['name'] == '':
-                flash("Please enter the name of the catalog item before
-                      submiting the form.")
+                flash("Please enter the name of the catalog item before\
+                submiting the form.")
                 return render_template(
                     "add_item.html", categories=categories)
             else:
