@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Category, CategoryItem
 from flask import session as login_session
 import datetime
+import sqlalchemy.exc
 
 app = Flask(__name__)
 
@@ -55,7 +56,7 @@ def list_category_items(category_name):
 def list_item(category_name, item_name):
     session = DBSession()
     categories = session.query(Category).all()
-    item = session.query(CategoryItem).filter_by(name=item_name).first()
+    item = session.query(CategoryItem).filter_by(name=item_name).one()
     category_name = item.category.name
     session.close()
     return render_template(
@@ -109,23 +110,32 @@ def add_item():
             else:
                 user_id = getUserID(login_session['email'])
 
-                session = DBSession()
-                category = session.query(Category).filter_by(
-                            name=request.form['category']).one()
+                try:
+                    session = DBSession()
+                    category = session.query(Category).filter_by(
+                                name=request.form['category']).one()
 
-                newItem = CategoryItem(
-                    name=request.form['name'],
-                    description=request.form['description'],
-                    date=datetime.datetime.now(),
-                    category=category,
-                    user_id=user_id)
+                    newItem = CategoryItem(
+                        name=request.form['name'],
+                        description=request.form['description'],
+                        date=datetime.datetime.now(),
+                        category=category,
+                        user_id=user_id)
 
-                session.add(newItem)
-                session.commit()
-                session.close()
+                    session.add(newItem)
+                    session.commit()
+                    session.close()
 
-                flash("New item added successfully.")
-                return redirect(url_for('list_catalog'))
+                    flash("New item added successfully.")
+                    return redirect(url_for('list_catalog'))
+                except sqlalchemy.exc.IntegrityError:
+                    # raise
+                    flash("Unable to save the catalog Item: Please ensure that \
+                    the item Name is unique.")
+                    return render_template(
+                        "add_item.html", categories=categories)
+
+
     else:
         return render_template(
             "add_item.html", categories=categories)

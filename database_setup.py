@@ -12,21 +12,21 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    email = Column(String)
+    email = Column(String, nullable=False, unique=True)
 
 
 class Category(Base):
     __tablename__ = 'category'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
 
 
 class CategoryItem(Base):
     __tablename__ = 'category_item'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
     description = Column(String(500))
     date = Column(DateTime, nullable=False)
 
