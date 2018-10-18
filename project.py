@@ -84,6 +84,11 @@ def delete_item(category_name, item_name):
         flash("You should login before you can delete a catalog item.")
         return redirect(url_for('list_catalog'))
 
+    session = DBSession()
+    categories = session.query(Category).all()
+    item = session.query(CategoryItem).filter_by(name=item_name).one()
+    session.close()
+
     if request.method == 'POST':
         # If the user has pressed the cancel button, abort and go back
         if request.form['submit_button'] == 'Cancel':
@@ -91,18 +96,18 @@ def delete_item(category_name, item_name):
                 url_for('list_item', category_name=category_name,
                     item_name=item_name))
         else:
-            session = DBSession()
-            item = session.query(CategoryItem).filter_by(name=item_name).one()
-            session.delete(item)
-            session.commit()
-            session.close()
-            flash("Item has been deleted.")
-            return redirect(url_for('list_catalog'))
+            # Check if the current user is same as the user who crated the item
+            if item.user_id != getUserID(login_session['email']):
+                    flash("Item created by another user cannot be deleted.")
+                    return redirect(url_for('list_catalog'))
+            else:
+                session = DBSession()
+                session.delete(item)
+                session.commit()
+                session.close()
+                flash("Item has been deleted.")
+                return redirect(url_for('list_catalog'))
     else:
-            session = DBSession()
-            categories = session.query(Category).all()
-            item = session.query(CategoryItem).filter_by(name=item_name).one()
-            session.close()
             return render_template("delete_item.html", categories=categories, item=item, category_name=category_name)
 
 
