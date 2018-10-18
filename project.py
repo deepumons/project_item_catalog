@@ -165,10 +165,13 @@ def add_item():
 
 
 def getUserID(email):
+    try:
         session = DBSession()
         user = session.query(User).filter_by(email=email).one()
         session.close()
         return user.id
+    except sqlalchemy.orm.exc.NoResultFound:
+        return
 
 
 if __name__ == "__main__":
