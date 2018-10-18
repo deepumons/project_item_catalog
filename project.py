@@ -22,6 +22,7 @@ def list_catalog():
     login_session['user_id'] = 1
     login_session['email'] = "urdeepak@gmail.com"
     # del login_session['user_id']
+    # del login_session['email']
     # Test code ends
 
     if 'user_id' not in login_session:
@@ -75,14 +76,34 @@ def edit_item(category_name, item_name):
         category_name=category_name)
 
 
-@app.route("/catalog/<string:category_name>/<string:item_name>/delete")
+@app.route("/catalog/<string:category_name>/<string:item_name>/delete",
+           methods=['GET', 'POST'])
 def delete_item(category_name, item_name):
-    session = DBSession()
-    categories = session.query(Category).all()
-    item = session.query(CategoryItem).filter_by(name=item_name).one()
-    session.close()
-    return render_template(
-        "delete_item.html", categories=categories, item=item)
+    # Check if the user is logged in before going further
+    if 'user_id' not in login_session:
+        flash("You should login before you can delete a catalog item.")
+        return redirect(url_for('list_catalog'))
+
+    if request.method == 'POST':
+        # If the user has pressed the cancel button, abort and go back
+        if request.form['submit_button'] == 'Cancel':
+            return redirect(
+                url_for('list_item', category_name=category_name,
+                    item_name=item_name))
+        else:
+            session = DBSession()
+            item = session.query(CategoryItem).filter_by(name=item_name).one()
+            session.delete(item)
+            session.commit()
+            session.close()
+            flash("Item has been deleted.")
+            return redirect(url_for('list_catalog'))
+    else:
+            session = DBSession()
+            categories = session.query(Category).all()
+            item = session.query(CategoryItem).filter_by(name=item_name).one()
+            session.close()
+            return render_template("delete_item.html", categories=categories, item=item, category_name=category_name)
 
 
 @app.route("/catalog/add", methods=['GET', 'POST'])
@@ -98,7 +119,7 @@ def add_item():
 
     if request.method == 'POST':
         # If the user has pressed the cancel button, abort and go back
-        if request.form['submit_button'] == 'cancel':
+        if request.form['submit_button'] == 'Cancel':
             return redirect(url_for('list_catalog'))
         else:
             # See if the user has entered any data before proceeding
@@ -129,13 +150,10 @@ def add_item():
                     flash("New item added successfully.")
                     return redirect(url_for('list_catalog'))
                 except sqlalchemy.exc.IntegrityError:
-                    # raise
-                    flash("Unable to save the catalog Item: Please ensure that \
-                    the item Name is unique.")
+                    flash("Unable to save the catalog Item. Please ensure \
+                    that the item Name is unique.")
                     return render_template(
                         "add_item.html", categories=categories)
-
-
     else:
         return render_template(
             "add_item.html", categories=categories)
