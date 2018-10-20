@@ -65,7 +65,9 @@ def list_item(category_name, item_name):
         category_name=category_name)
 
 
-@app.route("/catalog/<string:category_name>/<string:item_name>/edit", methods=['GET','POST'])
+@app.route(
+    "/catalog/<string:category_name>/<string:item_name>/edit",
+    methods=['GET', 'POST'])
 def edit_item(category_name, item_name):
 
     # Check if the user is logged in before going further
@@ -82,10 +84,13 @@ def edit_item(category_name, item_name):
             if request.form['name'] is None or request.form['name'] == '':
                 flash("Please enter the name of the catalog item before\
                 submiting the form.")
-                return redirect(url_for('edit_item', category_name=category_name, item_name=item_name ))
+                return redirect(url_for(
+                    'edit_item', category_name=category_name,
+                    item_name=item_name))
 
             session = DBSession()
-            edited_item = session.query(CategoryItem).filter_by(name=item_name).one()
+            edited_item = session.query(CategoryItem)
+            .filter_by(name=item_name).one()
             category = session.query(Category).filter_by(
                         name=request.form['category']).one()
 
@@ -95,15 +100,14 @@ def edit_item(category_name, item_name):
                 session.close()
                 return redirect(url_for('list_catalog'))
 
-
             if request.form['name']:
-                edited_item.name=request.form['name']
+                edited_item.name = request.form['name']
             if request.form['description']:
-                edited_item.description=request.form['description']
+                edited_item.description = request.form['description']
             if request.form['category']:
                 edited_item.category = category
 
-            edited_item.date=datetime.datetime.now()
+            edited_item.date = datetime.datetime.now()
 
             session.add(edited_item)
             session.commit()
@@ -151,7 +155,9 @@ def delete_item(category_name, item_name):
                 flash("Item has been deleted.")
                 return redirect(url_for('list_catalog'))
     else:
-            return render_template("delete_item.html", categories=categories, item=item, category_name=category_name)
+            return render_template(
+                "delete_item.html", categories=categories, item=item,
+                category_name=category_name)
 
 
 @app.route("/catalog/add", methods=['GET', 'POST'])
