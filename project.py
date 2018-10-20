@@ -65,15 +65,60 @@ def list_item(category_name, item_name):
         category_name=category_name)
 
 
-@app.route("/catalog/<string:category_name>/<string:item_name>/edit")
+@app.route("/catalog/<string:category_name>/<string:item_name>/edit", methods=['GET','POST'])
 def edit_item(category_name, item_name):
-    session = DBSession()
-    categories = session.query(Category).all()
-    item = session.query(CategoryItem).filter_by(name=item_name).one()
-    session.close()
-    return render_template(
-        "edit_item.html", categories=categories, item=item,
-        category_name=category_name)
+
+    # Check if the user is logged in before going further
+    if 'user_id' not in login_session:
+        flash("You should login before you can edit a catalog item.")
+        return redirect(url_for('list_catalog'))
+
+    if request.method == 'POST':
+        # If the user has pressed the cancel button, abort and go back
+        if request.form['submit_button'] == 'Cancel':
+            return redirect(url_for('list_catalog'))
+        else:
+            # See if the user has entered any data before proceeding
+            if request.form['name'] is None or request.form['name'] == '':
+                flash("Please enter the name of the catalog item before\
+                submiting the form.")
+                return redirect(url_for('edit_item', category_name=category_name, item_name=item_name ))
+
+            session = DBSession()
+            edited_item = session.query(CategoryItem).filter_by(name=item_name).one()
+            category = session.query(Category).filter_by(
+                        name=request.form['category']).one()
+
+            # Check if the current user is the owner of item before editing
+            if edited_item.user_id != getUserID(login_session['email']):
+                flash("Item created by another user cannot be edited.")
+                session.close()
+                return redirect(url_for('list_catalog'))
+
+
+            if request.form['name']:
+                edited_item.name=request.form['name']
+            if request.form['description']:
+                edited_item.description=request.form['description']
+            if request.form['category']:
+                edited_item.category = category
+
+            edited_item.date=datetime.datetime.now()
+
+            session.add(edited_item)
+            session.commit()
+            session.close()
+
+            flash("Item updated successfully.")
+            return redirect(url_for('list_catalog'))
+    else:
+        session = DBSession()
+        categories = session.query(Category).all()
+        item = session.query(CategoryItem).filter_by(name=item_name).one()
+        session.close()
+        return render_template(
+            "edit_item.html", categories=categories, item=item,
+            category_name=category_name)
 
 
 @app.route("/catalog/<string:category_name>/<string:item_name>/delete",
@@ -92,9 +137,7 @@ def delete_item(category_name, item_name):
     if request.method == 'POST':
         # If the user has pressed the cancel button, abort and go back
         if request.form['submit_button'] == 'Cancel':
-            return redirect(
-                url_for('list_item', category_name=category_name,
-                    item_name=item_name))
+            return redirect(url_for('list_catalog'))
         else:
             # Check if the current user is same as the user who crated the item
             if item.user_id != getUserID(login_session['email']):
@@ -134,8 +177,6 @@ def add_item():
                 return render_template(
                     "add_item.html", categories=categories)
             else:
-                user_id = getUserID(login_session['email'])
-
                 try:
                     session = DBSession()
                     category = session.query(Category).filter_by(
@@ -146,7 +187,7 @@ def add_item():
                         description=request.form['description'],
                         date=datetime.datetime.now(),
                         category=category,
-                        user_id=user_id)
+                        user_id=getUserID(login_session['email']))
 
                     session.add(newItem)
                     session.commit()
