@@ -6,7 +6,7 @@
     {% for i in categories %}
     <div>
       <p>
-      <a href='{{url_for('list_category_items', category_name = i.name) }}'>
+      <a href='{{url_for('list_category_items', category_name=i.name) }}'>
         {{i.name}}
         </a>
         </p>
@@ -15,20 +15,20 @@
 </div>
 <div id="main-panel">
     <h1>Edit item</h1>
-    <form action= "{{url_for('edit_item', category_name=category_name, item_name=item_name)}}" method = 'POST'>
+    <form action= "{{url_for('edit_item', category_name=category_name, item_name=item.name)}}" method="POST">
     <p>Name:</p>
-    <input type = 'text' size='30' name = 'name' placeholder = '{{item.name}}'>
+    <input type = 'text' size='30' name='name' value='{{item.name}}'>
     <p>Description:</p>
-    <input type = 'textarea' rows='4' size='60' name = 'name' placeholder = '{{item.description}}'>
+    <input type = 'textarea' size='60' name='description' value='{{item.description}}'>
     <p>Category:</p>
-    <select name=category method="GET" action="/">
+    <select name='category' action="/">
     {% for i in categories %}
     <option value="{{i.name}}" {% if i.name == category_name%} selected {% endif %}>{{i.name}}</option>"
     {% endfor %}
     </select>
     <p>
-    <input type='submit' value='Update'>
-    <input type='submit' value='Cancel'>
+    <input type='submit' name='submit_button' value='Update'>
+    <input type='submit' name='submit_button' value='Cancel'>
     </p>
     </form>
 </div>
