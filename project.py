@@ -220,6 +220,14 @@ def categoriesJSON():
     session.close()
     return jsonify(Categories=[category.serialize for category in categories])
 
+# JSON API endpoint for category items
+@app.route("/catalog/items/JSON")
+def itemsJSON():
+    session = DBSession()
+    category_items = session.query(CategoryItem).all()
+    session.close()
+    return jsonify(CategoryItems=[item.serialize for item in category_items])
+
 
 def getUserID(email):
     try:
