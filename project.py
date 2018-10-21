@@ -222,16 +222,17 @@ def categoriesJSON():
 
 
 # JSON API endpoint for category items
-@app.route("/catalog/items/JSON")
-def itemsJSON():
+@app.route("/catalog/<string:category_name>/items/JSON")
+def itemsJSON(category_name):
     session = DBSession()
-    category_items = session.query(CategoryItem).all()
+    category= session.query(Category).filter_by(name=category_name).one()
+    category_items = session.query(CategoryItem).filter_by(category=category).all()
     session.close()
     return jsonify(CategoryItems=[item.serialize for item in category_items])
 
 
-@app.route("/catalog/<string:item_name>/JSON")
-def itemJSON(item_name):
+@app.route("/catalog/<string:category_name>/<string:item_name>/JSON")
+def itemJSON(category_name, item_name):
     try:
         session = DBSession()
         category_item = session.query(CategoryItem).filter_by(
