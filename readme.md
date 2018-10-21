@@ -2,12 +2,12 @@
 
 ## About
 
-A light weight RESTful web application that maintains a list of items, and their categories as a product catalog. This project is my submission for the Udacity Full Stack Nanodegree program.
+ A light weight RESTful web application that maintains a list of items, and their categories as a product catalog. This project is my submission for the Udacity Full Stack Nanodegree program.
 
 ## Contents
 
 The project is organized in the following way:
-- / - Root folder
+- /project_item_catalog - Root folder
 - /static - Contains the CSS StyleSheet and images used in this project.
 - /templates  - Contains the html template files referenced by the project.
 - project.py  - The main python file.
