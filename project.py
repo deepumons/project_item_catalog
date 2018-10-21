@@ -1,4 +1,5 @@
-from flask import Flask, render_template, redirect, request, url_for, flash
+from flask import Flask, render_template, redirect, request, url_for
+from flask import flash, jsonify
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Category, CategoryItem
@@ -89,8 +90,8 @@ def edit_item(category_name, item_name):
                     item_name=item_name))
 
             session = DBSession()
-            edited_item = session.query(CategoryItem)
-            .filter_by(name=item_name).one()
+            edited_item = session.query(CategoryItem).filter_by(
+                name=item_name).one()
             category = session.query(Category).filter_by(
                         name=request.form['category']).one()
 
@@ -209,6 +210,15 @@ def add_item():
     else:
         return render_template(
             "add_item.html", categories=categories)
+
+
+# JSON API endpoint for categories
+@app.route("/catalog/categories/JSON")
+def categoriesJSON():
+    session = DBSession()
+    categories = session.query(Category).all()
+    session.close()
+    return jsonify(Categories=[category.serialize for category in categories])
 
 
 def getUserID(email):
