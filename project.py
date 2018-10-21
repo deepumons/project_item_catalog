@@ -220,6 +220,7 @@ def categoriesJSON():
     session.close()
     return jsonify(Categories=[category.serialize for category in categories])
 
+
 # JSON API endpoint for category items
 @app.route("/catalog/items/JSON")
 def itemsJSON():
@@ -227,6 +228,18 @@ def itemsJSON():
     category_items = session.query(CategoryItem).all()
     session.close()
     return jsonify(CategoryItems=[item.serialize for item in category_items])
+
+
+@app.route("/catalog/<string:item_name>/JSON")
+def itemJSON(item_name):
+    try:
+        session = DBSession()
+        category_item = session.query(CategoryItem).filter_by(
+            name=item_name).one()
+        session.close()
+        return jsonify(CategoryItem=category_item.serialize)
+    except sqlalchemy.orm.exc.NoResultFound:
+        return("Error: There is no item with name '{}'".format(item_name))
 
 
 def getUserID(email):
