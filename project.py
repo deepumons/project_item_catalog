@@ -6,6 +6,7 @@ from database_setup import Base, User, Category, CategoryItem
 from flask import session as login_session
 import datetime
 import sqlalchemy.exc
+import random, string
 
 app = Flask(__name__)
 
@@ -16,6 +17,15 @@ DBSession = sessionmaker(bind=engine)
 
 
 # All the routes for the application are defined here
+# Route for /login and anti forgery token
+@app.route('/login')
+def showLogin():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                    for x in xrange(32))
+    login_session['state'] = state
+    return state
+
+
 @app.route("/")
 @app.route("/catalog/")
 def list_catalog():
