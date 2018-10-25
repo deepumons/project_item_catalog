@@ -112,6 +112,12 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    # Create this user in the local database if it doesn't already exist
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+        login_session['user_id'] = user_id
+
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -371,7 +377,7 @@ def itemJSON(category_name, item_name):
     except sqlalchemy.orm.exc.NoResultFound:
         return("Error: There is no item with name '{}'".format(item_name))
 
-
+# Methods to manage user sessions
 def getUserID(email):
     try:
         session = DBSession()
@@ -381,6 +387,16 @@ def getUserID(email):
     except sqlalchemy.orm.exc.NoResultFound:
         return None
 
+
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session[
+                   'email'])
+    session = DBSession()
+    session.add(newUser)
+    session.commit()
+    session.close()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
 
 if __name__ == "__main__":
     app.secret_key = "some_secret_key"
