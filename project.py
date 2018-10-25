@@ -125,13 +125,7 @@ def gconnect():
 
 @app.route("/")
 @app.route("/catalog/")
-def list_catalog():
-    # To be removed. Setting the session user_id for testing
-    login_session['user_id'] = 1
-    login_session['email'] = "urdeepak@gmail.com"
-    # del login_session['user_id']
-    # del login_session['email']
-    # Test code ends
+def list_catalog():    
 
     if 'user_id' not in login_session:
         add_item = False
@@ -357,7 +351,7 @@ def getUserID(email):
         session.close()
         return user.id
     except sqlalchemy.orm.exc.NoResultFound:
-        return
+        return None
 
 
 if __name__ == "__main__":
