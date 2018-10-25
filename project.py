@@ -6,9 +6,11 @@ from database_setup import Base, User, Category, CategoryItem
 from flask import session as login_session
 import datetime
 import sqlalchemy.exc
-import random, string
+# Imports related to creating anti-forgery token
+import random
+import string
 
-# imports for gconnect implementation
+# Imports for gconnect implementation
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -19,7 +21,7 @@ import requests
 # Create a flask instance
 app = Flask(__name__)
 
-# Load the clients secrets file and store locally
+# Load the client secrets file and store locally
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Item Catalog App"
@@ -92,8 +94,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(
+            json.dumps('Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -124,7 +126,8 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;\
+        -webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
     return output
 
@@ -134,11 +137,13 @@ def gdisconnect():
     access_token = login_session.get('access_token')
     if access_token is None:
         print 'Access Token is None'
-        response = make_response(json.dumps('Current user not connected.'), 401)
+        response = make_response(
+            json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' \
+        % login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
 
@@ -152,7 +157,8 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -360,8 +366,9 @@ def categoriesJSON():
 @app.route("/catalog/<string:category_name>/items/JSON")
 def itemsJSON(category_name):
     session = DBSession()
-    category= session.query(Category).filter_by(name=category_name).one()
-    category_items = session.query(CategoryItem).filter_by(category=category).all()
+    category = session.query(Category).filter_by(name=category_name).one()
+    category_items = session.query(
+        CategoryItem).filter_by(category=category).all()
     session.close()
     return jsonify(CategoryItems=[item.serialize for item in category_items])
 
@@ -376,6 +383,7 @@ def itemJSON(category_name, item_name):
         return jsonify(CategoryItem=category_item.serialize)
     except sqlalchemy.orm.exc.NoResultFound:
         return("Error: There is no item with name '{}'".format(item_name))
+
 
 # Methods to manage user sessions
 def getUserID(email):
@@ -397,6 +405,7 @@ def createUser(login_session):
     session.close()
     user = session.query(User).filter_by(email=login_session['email']).one()
     return user.id
+
 
 if __name__ == "__main__":
     app.secret_key = "some_secret_key"
