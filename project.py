@@ -118,7 +118,8 @@ def gconnect():
     user_id = getUserID(login_session['email'])
     if not user_id:
         user_id = createUser(login_session)
-        login_session['user_id'] = user_id
+
+    login_session['user_id'] = user_id
 
     output = ''
     output += '<h1>Welcome, '
@@ -153,6 +154,7 @@ def gdisconnect():
         del login_session['username']
         del login_session['email']
         del login_session['picture']
+        del login_session['user_id']
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
