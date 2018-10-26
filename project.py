@@ -137,11 +137,12 @@ def gconnect():
 def gdisconnect():
     access_token = login_session.get('access_token')
     if access_token is None:
-        print 'Access Token is None'
         response = make_response(
             json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        # return response
+        flash("Unable to signout. Current user not connected.")
+        return redirect(url_for('list_catalog'))
 
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' \
         % login_session['access_token']
@@ -157,12 +158,17 @@ def gdisconnect():
         del login_session['user_id']
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        # return response
+        flash("You have logged out successfully.")
+        return redirect(url_for('list_catalog'))
+
     else:
         response = make_response(
             json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
-        return response
+        # return response
+        flash("Unable to signout. Failed to revoke token for given user.")
+        return redirect(url_for('list_catalog'))
 
 
 @app.route("/")
