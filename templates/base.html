@@ -10,12 +10,12 @@
     <div id="header">
       <div>
         <h3 align="right">
-{% if 'user_id' not in session %}
-  <a style="color:#FFFFFF" href='{{url_for('showLogin') }}'>[Login]</a>
-{% else %}
-  <a style="color:#FFFFFF" href='{{url_for('gdisconnect') }}'>[Logout]</a>
-{% endif %}
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          {% if 'user_id' not in session %}
+              <a style="color:#FFFFFF" href='{{url_for('showLogin') }}'>[Login]</a>
+            {% else %}
+              <a style="color:#FFFFFF" href='{{url_for('gdisconnect') }}'>[Logout]</a>
+            {% endif %}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </h3>
       </div>
         <div id="logo">
