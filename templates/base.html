@@ -8,6 +8,16 @@
 <body>
     <!-- start header -->
     <div id="header">
+      <div>
+        <h3 align="right">
+{% if 'user_id' not in session %}
+  <a style="color:#FFFFFF" href='{{url_for('showLogin') }}'>[Login]</a>
+{% else %}
+  <a style="color:#FFFFFF" href='{{url_for('gdisconnect') }}'>[Logout]</a>
+{% endif %}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </h3>
+      </div>
         <div id="logo">
             <h1>
               <a href='{{url_for('list_catalog') }}'>
@@ -21,7 +31,8 @@
     <div id="page">
         <!-- start content -->
         <div id="content">
-          <!-- Flash message begins -->          
+
+          <!-- Place holder for flash messages -->
               {% with messages = get_flashed_messages() %}
                 {% if messages %}
                   <div class = 'input-validation-error'>
