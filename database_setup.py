@@ -8,7 +8,7 @@ Base = declarative_base()
 
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = 'catalog_user'
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
@@ -41,7 +41,7 @@ class CategoryItem(Base):
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship(Category)
 
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('catalog_user.id'))
     user = relationship(User)
 
     @property
