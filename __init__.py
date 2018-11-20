@@ -6,6 +6,7 @@ from database_setup import Base, User, Category, CategoryItem
 from flask import session as login_session
 import datetime
 import sqlalchemy.exc
+import os
 # Imports related to creating anti-forgery token
 import random
 import string
@@ -22,13 +23,16 @@ import requests
 app = Flask(__name__)
 
 # Load the client secrets file and store locally
+basedir = os.path.abspath(os.path.dirname(__file__))
+data_json = basedir+'/client_secrets.json'
 CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+    open(data_json, 'r').read())['web']['client_id']
 APPLICATION_NAME = "Item Catalog App"
 
 # Initialize the database connection, DB session
 #engine = create_engine('sqlite:///itemcatalog.db')
-engine = create_engine('postgresql:///itemcatalog')
+#engine = create_engine('postgresql:///itemcatalog')
+engine = create_engine('postgresql+psycopg2://grader:grader123@localhost/itemcatalog')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 
@@ -56,7 +60,9 @@ def gconnect():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+	basedir = os.path.abspath(os.path.dirname(__file__))
+	data_json = basedir+'/client_secrets.json'
+	oauth_flow = flow_from_clientsecrets(data_json, scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
