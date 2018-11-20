@@ -4,7 +4,8 @@ import datetime
 from database_setup import *
 
 #engine = create_engine('sqlite:///itemcatalog.db')
-engine = create_engine('postgresql:///itemcatalog')
+#engine = create_engine('postgresql:///itemcatalog')
+engine = create_engine('postgresql+psycopg2://grader:grader123@localhost/itemcatalog')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
